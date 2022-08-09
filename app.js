@@ -1,11 +1,10 @@
-// app.js
-
-const express = require('express');
-const connectDB = require('./config/db');
-var cors = require('cors');
+const express = require("express");
+const connectDB = require("./config/db");
+const cors = require("cors");
+const path = require("path");
 
 // routes
-const books = require('./routes/api/books');
+const books = require("./routes/api/books");
 
 const app = express();
 
@@ -18,10 +17,14 @@ app.use(cors({ origin: true, credentials: true }));
 // Init Middleware
 app.use(express.json({ extended: false }));
 
-app.get('/', (req, res) => res.send('Hello world!'));
+// API Routes
+app.use("/api/books", books);
 
-// use Routes
-app.use('/api/books', books);
+// Frontend build Route
+app.use(express.static(path.resolve(__dirname, "./frontend/build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "./frontend/build", "index.html"));
+});
 
 const port = process.env.PORT || 8082;
 
