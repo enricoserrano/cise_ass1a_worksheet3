@@ -21,9 +21,9 @@ app.use(express.json({ extended: false }));
 app.use("/api/books", books);
 
 // Frontend build Route
-app.use(express.static(path.resolve(__dirname, "./frontend/build")));
+app.use(express.static(path.resolve(__dirname, "./frontend/public")));
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "./frontend/build", "index.html"));
+  res.sendFile(path.resolve(__dirname, "./frontend/public", "index.html"));
 });
 
 const port = process.env.PORT || 8082;
