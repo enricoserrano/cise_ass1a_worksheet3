@@ -1,29 +1,23 @@
-const express = require("express");
-const connectDB = require("./config/db");
-const cors = require("cors");
-const path = require("path");
-
-// routes
-const books = require("./routes/api/books");
-
+const express = require('express');
+const connectDB = require('./config/db');
+const cors = require('cors');
+const books = require('./routes/api/books');
 const app = express();
 
-// Connect Database
 connectDB();
 
-// cors
 app.use(cors({ origin: true, credentials: true }));
-
-// Init Middleware
 app.use(express.json({ extended: false }));
+app.use('/api/books', books);
+app.use(express.static("build"));
 
-// API Routes
-app.use("/api/books", books);
+const path = require("path");
 
-// Frontend build Route
-app.use(express.static(path.resolve(__dirname, "./frontend/public")));
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "./frontend/public", "index.html"));
+// Step 1:
+app.use(express.static(path.resolve(__dirname, "./frontend/build")));
+// Step 2:
+app.get("*", function (request, response) {
+  response.sendFile(path.resolve(__dirname, "./frontend/build", "index.html"));
 });
 
 const port = process.env.PORT || 8082;
